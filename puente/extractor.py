@@ -179,9 +179,6 @@ def extract(message_text: str, message_id: str | None = None) -> dict:
         result = _fallback(message_id, errors)
     else:
         result["message_id"] = message_id
-        result["status"] = "new"
-        if result["location_text"] is None:
-            result["status"] = "needs_follow_up"
 
     result = guardrails.apply_safety_net(result, message_text)  # runs even if the LLM failed
-    return guardrails.apply_code_rules(result)
+    return guardrails.apply_code_rules(result)  # also sets status
