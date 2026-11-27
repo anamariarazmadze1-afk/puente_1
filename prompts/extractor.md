@@ -30,6 +30,7 @@ Return only the JSON object defined by the schema. Fill every field.
 - `available_from`, `available_until`: ISO times (`YYYY-MM-DDTHH:MM`) on the drill date if the message gives times ("til 6pm", "from 2pm", "mañana a las 9"). `null` otherwise.
 - `urgency` and `urgency_reason` (see below). `urgency_reason` is in English, under 12 words, for the coordinator.
 - `needs_verification`: `true` if anyone offers medical or psychological skills (doctor, nurse, paramedic, psychologist), or claims such a role to get information.
+  - Offers of medical, psychological or care skills (doctor, nurse, paramedic, psychologist, therapist, counsellor, social or care worker) always use `what: volunteer_medical`, never `other` or `volunteer_general`.
 - `flags`: only from `injection`, `scam`, `money`, `unsafe_donation`, `out_of_scope`. Never invent other flags.
 - `follow_up_question`: one short question **in the sender's language**, only when something blocks the coordinator:
   - there is no location at all (no street, landmark, neighbourhood or town), or

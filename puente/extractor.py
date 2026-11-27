@@ -144,7 +144,7 @@ def _fallback(message_id: str, reasons: list[str]) -> dict:
         "available_from": None, "available_until": None, "urgency": "orange",
         "urgency_reason": "extraction failed, needs manual review", "needs_verification": False,
         "flags": [], "follow_up_question": None, "confidence": 0.0,
-        "status": "needs_review", "review_reasons": reasons,
+        "status": "needs_review", "review_reasons": reasons, "extraction_failed": True,
     }
 
 

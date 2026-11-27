@@ -117,11 +117,32 @@ def set_status(result: dict) -> dict:
     return result
 
 
+def flag_surplus(result: dict, board: dict[str, dict]) -> dict:
+    """Add the code flag `surplus` if the message offers an item the needs board marks Enough.
+
+    `board` comes from `store.needs_board()`, read before this message is saved.
+    """
+    if any(it["type"] == "offer" and board.get(it["what"], {}).get("level") == "Enough"
+           for it in result.get("items", [])):
+        if "surplus" not in result["flags"]:
+            result["flags"].append("surplus")
+    return result
+
+
 def apply_code_rules(result: dict) -> dict:
-    """Code-set rules: unsafe items, duplicates, per-item verification (only volunteer_medical), status."""
+    """Code-set rules: unsafe items, duplicates, per-item verification, status.
+
+    Verification is set on volunteer_medical items, and on volunteer or `other` items when the model
+    flags the message as needing verification. Other items (e.g. the nurse's van) are not flagged.
+    """
     if result.get("status") != "needs_review":
         result = drop_unsafe_items(result)
         result["items"] = merge_duplicate_items(result["items"])
+    model_flagged = bool(result.get("needs_verification"))
     for item in result.get("items", []):
-        item["needs_verification"] = item.get("what") == "volunteer_medical"
+        item["needs_verification"] = item.get("what") == "volunteer_medical" or (
+            # Keep the model's verification flag on skills it could not map to volunteer_medical,
+            # so an unverified care role is never matched (rule 5). Goods like a van stay unflagged.
+            model_flagged and (item.get("category") == "volunteers" or item.get("what") == "other")
+        )
     return set_status(result)
