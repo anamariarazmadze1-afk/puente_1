@@ -133,7 +133,8 @@ Status values:
   - **Needed**: remaining offers < open needs
   - **OK**: offers between 1x and 2x open needs
   - **Enough**: offers > 2x open needs, or offers with no open needs at all
-- A new offer for an item marked Enough gets the `surplus` flag and an auto-reply thanking them and listing what is Needed.
+- A new offer in the `supplies` category for an item marked Enough gets the `surplus` flag and an auto-reply thanking them and listing what is Needed.
+- Surplus applies to supplies only, because the problem Puente solves is physical donations piling up. Volunteer, transport and shelter offers are never flagged `surplus`: with no open needs they simply stay available on the map.
 
 ## Tool contracts
 

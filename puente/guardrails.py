@@ -118,11 +118,14 @@ def set_status(result: dict) -> dict:
 
 
 def flag_surplus(result: dict, board: dict[str, dict]) -> dict:
-    """Add the code flag `surplus` if the message offers an item the needs board marks Enough.
+    """Add the code flag `surplus` if the message offers supplies the needs board marks Enough.
 
+    Only the `supplies` category: surplus is about unwanted physical donations piling up.
+    Volunteer, transport and shelter offers with no open needs just stay available on the map.
     `board` comes from `store.needs_board()`, read before this message is saved.
     """
-    if any(it["type"] == "offer" and board.get(it["what"], {}).get("level") == "Enough"
+    if any(it["type"] == "offer" and it.get("category") == "supplies"
+           and board.get(it["what"], {}).get("level") == "Enough"
            for it in result.get("items", [])):
         if "surplus" not in result["flags"]:
             result["flags"].append("surplus")
